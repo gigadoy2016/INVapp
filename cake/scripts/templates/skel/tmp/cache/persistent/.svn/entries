@@ -1,0 +1,16 @@
+9
+
+dir
+11
+svn://127.0.0.1/INV/cake/scripts/templates/skel/tmp/cache/persistent
+svn://127.0.0.1/INV
+
+
+
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+
+svn:special svn:externals svn:needs-lock
+

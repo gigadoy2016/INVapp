@@ -1,0 +1,8 @@
+<head>
+
+</head>
+<body>
+	<div style="float:left">
+		<?=$Bill?>
+	</div>
+</body>

@@ -1,0 +1,40 @@
+9
+
+dir
+11
+svn://127.0.0.1/INV/cake/scripts/templates/skel/config/sql
+svn://127.0.0.1/INV
+
+
+
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+
+svn:special svn:externals svn:needs-lock
+
+db_acl.sql
+file
+
+
+
+
+2006-05-08T14:06:16.000000Z
+3b37d5df854471d46753082ce3eba593
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+sessions.sql
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+e506979988d92a868da25c5707f97cc0
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+

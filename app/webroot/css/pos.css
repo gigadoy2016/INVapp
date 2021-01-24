@@ -1,0 +1,113 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 9 ก.พ. 2557, 15:13:07
+    Author     : BSHOP
+*/
+
+body {margin-top: 0;}
+.test {border:1px solid gray;float:left}
+
+/*div{border:1px gray solid; color:gray; font-size: 14px; float: left;font-family: tahoma, serif; }*/
+.pos {border:0px gray solid; color:gray; font-size: 14px; float: left;font-family: tahoma, serif; }
+
+#main{height: 590px; width: auto; margin-top:0px; padding:0;float:left}
+#result_sec{height: 65px;width: auto;}/* 80px */
+#body_sec{height: 508px; width: auto} /* 510px */
+#result_panel{background-color:white; border-width: 0; height: 70px; width: 180px;font-size: 40px;padding: 8px 0 0 5px; }
+#cash_sale{height: 506px;width: 450px;}
+#cash_sale_header{height: 35px;width: 446px; font-size: 24px;}
+.cash_sale{height: 18px;background-color: darkslateblue; color: white; border: 0px;font-size: 12px; }
+#cash_sale_1{width:25px;}
+#cash_sale_2{width:189px; text-align: center;border-left: 1px whitesmoke dotted;}
+#cash_sale_3{width:46px; text-align: center;border-left: 1px whitesmoke dotted;}
+#cash_sale_4{width:50px; text-align: center;border-left: 0 whitesmoke dotted;}
+#cash_sale_5{width:77px; text-align: center;border-left: 1px whitesmoke dotted;}
+#cash_sale_body{height: 467px;width: 461px ;overflow: auto;}
+#cash_sale_list_header{height: 18px;width: 442px; border:3px white solid; border-bottom: 0;  }
+#container{height: 506px;width: 796px;}
+#CC{width: 700px;height: 504px}
+            
+#CCL{width: 700px; }
+.CCLH{background: #D3A4F5;color:white;width: 700px;height: 20px;border-width:0px;  margin-left:3px; padding-left:3px}
+#CCLB{border:0px;width: 700px;height: 230px;}
+            
+#CH{width: 90px;height: 504px}
+#CHL{width: 90px;height: 504px; border-width:0px; background-color: orchid;}
+
+#CCLT{border:0px;width: 700px;height: 234px; background-color: #F6D5AC;overflow: auto;}
+            
+            /*-----------------------------------------------*/
+.cash_list{border-width: 0 1px 1px 0;font-size: 12px; color:blue;height: 20px;border-color: lightsteelblue;padding-top: 2px; background-color: white;        }
+.cash_list_1{width:25px; text-align: center;}
+.cash_list_2{width:187px; padding-left: 2px;}
+.cash_list_3{width:46px; border-width: 0 0 1px 0; text-align: right;}
+.cash_list_4{width:8px; border-width: 0 0 1px 0;text-align: right;}
+.cash_list_5{width:40px; border-width: 0 1px 1px 0;text-align: center; color: red;}
+.cash_list_6{width:76px; border-width: 0 1px 1px 0;text-align: right;color:green;font-weight:bold;padding-right: 2px}
+.cash_list_result1{width: 310px; border: 0px}
+.cash_list_result2{border-width: 0 1px 1px 1px; width: 78px; font-weight: bold; text-align: right;  font-size: 15px;    }
+            
+            /* important  */
+#I_price_summary{border: 2px solid gray; height: 45px; width: 150px;margin-top: 10px; text-align: right;font-size: 35px;padding-right: 5px;color:#C60505;      }
+            
+            
+            /* ช่องตัวเลือก category */
+#selectCategory .ui-selecting { background: #FECA40; }
+#selectCategory .ui-selected { background: #EAC5A3; color: red;  background-image:none}
+#selectCategory { list-style-type: none; margin: 0; padding: 0; width: 700px; }
+#selectCategory li { margin: 3px; padding: 1px; float: left; width: 60px; height: 65px; font-size: 1em; text-align: center; }
+.ui-pos{	border: 1px solid #d3d3d3; font-weight: normal; color: #555555;cursor: pointer;}
+            /**/
+            
+#selectType { list-style-type: none; margin: 0; padding: 0; width: 700px; }
+#selectType li { margin: 3px; padding: 1px; float: left; width: 60px; height: 62px; font-size: 0.8em; text-align: center; }
+
+/*        Diagram item         */
+
+#item-picture{ border:1px grey dotted; width:100px;height:100px; color:gray}
+.item_dialog{ float:left }
+.input_1{border:0;font-weight:bold; }
+
+#stock{ border:1px #FECA40 dotted ; border-collapse:collapse; }
+
+.I_order_list_header {margin:0px;}
+.I_order_list_header_1{float:left;margin:0px;padding:2px;background:#ccccff;color:#333399;height:20px;text-align:center;}
+
+.I_order_list_product_1{float:left; margin:0px; padding:2px; background:#fff; color:#333399; height:23px; text-align:center; border-width: 0px 1px 1px 0px; border-style: none solid solid none; border-color: gray gray gray gray; }
+.I_order_list_product_summary{margin-right:17px;border-width:0 1px 1px 1px;border-style:solid;border-color:gray;width:89px;height:28px;float:right;text-align:right;font-weight:bold;font-size:16px;color:red;}
+
+.IOLP1{width:17px;}
+.IOLP2{width:220px;text-align:left;}
+.IOLP3{width:50px;text-align:right;border-width: 0px 0px 1px 0px;}
+.IOLP4{width:40px;text-align:left;color:red;float:left}
+.IOLP5{width:85px;color:green;font-weight:bold;text-align:right}
+.IOLP6{color:#000; font-size:12px}
+
+/*แสดงการตัด Stock*/
+.clearStock{} 
+
+/*payment*/
+#payment_show1{border-right:1px solid #DDD;width:130px;float:left}
+#payment_show2{border-right:1px solid #DDD;width:250px;float:left}
+#payment_show3{border:0;width:auto;float:left; overflow: auto;}
+.payment_border{padding:3px; border:0;}
+#payment_text{height:40px;text-align:right;font-size:25px;font-weight:bold;color:green}
+.payment_banknote{height:50px;width:120px;font-weight:bold;color:gray}
+.payment_stock{width:220px;border:1px dashed gray;font-size:10px;margin-left:2px; color:gray;}
+.payment_print{margin:2px; padding-left:5px;border:1px solid gray;width:120px;height:40px;background-color:#FBF2EF;float:left; color:#999}
+
+.p_zone{border:0px solid gray;width:600px;font-size:30px;}
+.p_nameItem{padding:5px 1px 5px 1px;width:380px}
+
+@media print  {  
+			.print_1{display:block;}
+			.page-break { display:block;height:1px; page-break-before:always;} 
+			.page-break-no{ display:block;height:1px; page-break-after:avoid; font-size:16px }   
+} 
+@media screen  {  
+			.print_1{display:none;}
+}

@@ -1,0 +1,77 @@
+9
+
+dir
+11
+svn://127.0.0.1/INV/cake/scripts/templates/skel/webroot
+svn://127.0.0.1/INV
+
+
+
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+
+svn:special svn:externals svn:needs-lock
+
+files
+dir
+
+css
+dir
+
+.htaccess
+file
+
+
+
+
+2006-05-22T02:30:16.000000Z
+080811ae38f2352a0db98293f335ac65
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+img
+dir
+
+js
+dir
+
+index.php
+file
+
+
+
+
+2007-02-02T13:55:50.000000Z
+673f40b4a0ed15a9ef2bb9a88f6975a0
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+css.php
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+520de0731bb8e89458acf2137d143dca
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+favicon.ico
+file
+
+
+
+
+2007-10-18T16:33:24.000000Z
+1e459d09794b6198aee3cd40ced99880
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+has-props
+

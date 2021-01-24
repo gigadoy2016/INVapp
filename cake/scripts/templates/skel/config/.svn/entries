@@ -1,0 +1,91 @@
+9
+
+dir
+11
+svn://127.0.0.1/INV/cake/scripts/templates/skel/config
+svn://127.0.0.1/INV
+
+
+
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+
+svn:special svn:externals svn:needs-lock
+
+sql
+dir
+
+acl.ini.php
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+b4b908ecdd09fbfdf8e69e696987ad99
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+bootstrap.php
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+b3a5b79cf8dbdfe4b0fe39b0b363f62a
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+inflections.php
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+4309a2603308b1d6b6062222264da8cd
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+routes.php
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+6698bd73fedaaa6557931b3814e02446
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+database.php.default
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+b6d7ccc19b1d94a546feac89eb517cdd
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+
+core.php
+file
+
+
+
+
+2007-02-02T00:21:00.000000Z
+904dc235323f73677984a8d4351d538a
+2008-03-26T07:16:49.531250Z
+1
+gigadoy
+

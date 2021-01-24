@@ -1,0 +1,133 @@
+<html>
+    <head>
+		<title>POS เปลี่ยนสินค้า</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<link rel="stylesheet" type="text/css" href="../../js/ui-sunny/css/jquery-ui-1.10.4.custom.css">
+		<script src="../../js/lib/jquery.js"></script>
+		<style>
+			.style_1{font-family: tahoma, serif; font-size:18px}
+			
+			
+			.style_input1 {margin-left:8px;	padding-botton:0;	font-size:18px;	text-align:right;	font-weight:bold;	color:green; 	border-width:0 0 1px 0;
+						border-style:solid;	border-color:red;	background-color:#FEEED4;}
+			
+			.style_input2{margin-left:8px;	padding-botton:0;	font-size:18px;	text-align:left;	font-weight:bold;	color:green; 	border-width:0 ;
+						}
+			button {font-size:28px;width:100px;font-weight:bold;}
+			
+			.stock{
+				background-color:#FFDDDD;
+			}
+		</style>
+		<script>
+	
+	function check(){
+		var inS = document.getElementById("inS").value;
+		var outS = document.getElementById("outS").value;
+		if(inS == '' && outS == ''){
+			alert("ยังไม่ได้ใส่ข้อมูล");
+			return false;
+		}
+		
+	}
+	function addValue(obj){
+		//var numer  = 1;
+		var number 	= prompt("จำนวน");
+		if (number != null){
+			obj.innerHTML 		= number+".";
+		}
+		
+	}
+		</script>
+	</head>
+	<body>
+		<div></div>
+		<div>
+			<form  method="POST" name="input" action="" onsubmit="return check()">
+				<table style="width:800px" class="style_1">
+					<tr>
+						<th class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" width ="50%">IN</th>
+						<th class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" width ="50%">OUT</th></tr>
+					<tr>
+						<td height="40px">
+							<div>
+								1. <input type="text" size="5"  name="in[]" class="style_input1" > x 
+								<input type="text" class="style_input2" size="1"  value="1"  name="n[]"/>
+							</div>
+						</td>
+						<td height="40px">
+							<div>
+								1. <input type="text" size="5"  name="out[]" class="style_input1"> x 
+								<input type="text" class="style_input2" size="1"  value="1"  name="m[]"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td  height="40px">
+							<div>
+								2. <input type="text" size="5"  name="in[]" class="style_input1"> x 
+								<input  type="text" class="style_input2" size="1"  value="1"  name="n[]"/>
+							</div>
+						</td>
+						<td height="40px">
+							<div>
+								2. <input type="text" size="5"  name="out[]" class="style_input1"> x 
+								<input type="text" class="style_input2" size="1"  value="1"  name="m[]"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td  height="40px">
+							<div>
+								3. <input type="text" size="5"  name="in[]" class="style_input1"> x 
+								<input id="qi1" type="text" class="style_input2" size="1"  value="1"  name="n[]"/>
+							</div>
+						</td>
+						<td height="40px">
+							<div>
+								3. <input type="text" size="5"  name="out[]" class="style_input1"> x 
+								<input type="text" class="style_input2" size="1"  value="1"  name="m[]"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td height="40px">
+							<div>
+								4. <input type="text" size="5"  name="in[]" class="style_input1"> x 
+								<input type="text" class="style_input2" size="1"  value="1"  name="n[]"/>
+							</div>
+						</td>
+						<td  height="40px">
+							<div>
+								4. <input type="text" size="5"  name="out[]" class="style_input1"> x 
+								<input type="text" class="style_input2" size="1"  value="1"  name="m[]"/>
+							</div>
+						</td>
+					</tr>
+					<!--<tr>
+						<td align="center"><button class="">+</button></td>
+						<td align="center"><button class="">+</button></td>
+					</tr>-->
+					<tr>
+						<td height="75px"><input type="submit" name="submit"  ></td>
+					</tr>
+				</table>
+				<input type="hidden" name="i0" value="1">
+				<input type="hidden" name="i1" value="1">
+				<input type="hidden" name="i2" value="1">
+				<input type="hidden" name="i3" value="1">
+				
+				<input type="hidden" name="o0" value="1">
+				<input type="hidden" name="o1" value="1">
+				<input type="hidden" name="o2" value="1">
+				<input type="hidden" name="o3" value="1">
+			</form>
+		</div>
+		<div>
+			<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" style="width:100px;text-align:center">STOCKS</div>
+			<div id="stock">
+				<?=$stocks?>
+			</div>
+		</div>
+	</body>
+</html>

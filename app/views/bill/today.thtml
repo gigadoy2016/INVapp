@@ -1,0 +1,28 @@
+<head>
+	<meta charset="utf-8">
+	<script src="../js/jquery-1.11.3.js"></script>
+	<script src="../js/ui-sunny/js/jquery-ui-1.10.4.custom.js"></script>	
+	<link rel="stylesheet" type="text/css" href="../js/ui-sunny/css/jquery-ui-1.10.4.custom.css">
+	<script>
+		$(function() {
+			var Date = $( "#datepicker" ).datepicker();
+			$("#okDate").click(function(){
+				Date.datepicker( "option", "dateFormat", "yy/mm/dd" );
+				var d=Date.val();
+				window.location.href = "byDate/"+d;
+			});
+		});
+		
+	</script>
+</head>
+<body>
+	<div style="float:left">
+		<?=$Bill?>
+	</div>
+	<div style="float:left;padding-left:5px">
+		<p>
+			Date: <input type="text" id="datepicker"> 
+			<span><button id="okDate">OK</button></span>
+		</p>
+	</div>
+</body>

@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<style>
+ div{
+	float:left;
+ }
+</style>
+<script>
+	function tranFrom(){
+		
+		var v1 = document.getElementById("v1").value;
+
+		var v2 ;
+		
+		
+		while(v1.search("\n") >0){
+			v1 = v1.replace("\n", ", ");
+		}
+		document.getElementById("v2").value=v1;
+		document.getElementById("v1").select();
+	}
+</script>
+</head>
+<body>
+	<div >
+		<div>
+			<textarea rows="15" cols="10" autofocus id="v1"></textarea>
+		</div>
+		<div>
+			<textarea rows="15" cols="20" id="v2"></textarea>
+		</div>
+	</div>
+	<div>
+		<button type="submit" name="submit" onclick="tranFrom()">insert </button></div>
+	</br>
+	<div id="display"></div>
+</body>
+</html>

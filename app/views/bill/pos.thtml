@@ -1,0 +1,586 @@
+<html>
+    <head>
+		<title>POS บัวเงิน</title>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<link rel="stylesheet" type="text/css" href="../js/ui-sunny/css/jquery-ui-1.10.4.custom.css">
+      <link rel="stylesheet" type="text/css" href="../css/pos.css">
+	   <script src="../js/lib/bill.js"></script>
+	   <script src="../js/lib/item.js"></script>
+	   <script src="../js/lib/other.js"></script>
+	   <script src="../js/lib/jquery-1.10.2.js"></script>
+	   <script src="../js/ui-sunny/js/jquery-ui-1.10.4.custom.min.js"></script>
+	   <script src="../js/lib/printThis.js"></script>
+	   
+  <script>
+  //--------------------------------------------------//
+  //        static variable
+  //    Error : 001 connection database fail
+  
+  
+  var listOrder_1 = new Bill();
+  var groupOrder = new Bill();
+  var promotion = null;
+  var obj = new Item();
+  var summary =0;
+  var widthPayment = "650px";
+  var myVar=setInterval(function(){myTimer()},1000);
+  var error =null;
+  var display = 0 ; 					// keypress monitor
+  var loopA = 0;
+  
+  
+  var PO_id = "test";
+  //ทำการเรียก function ในการเปิด PO (สร้างฐานข้อมูล) และ รับค่า Bill ID
+		listOrder_1.bill_id = PO_id = openPO();
+
+	//
+  
+   $(function() {
+		
+		$( "#selectCategory" ).selectable( {
+			selected: function(event,ui){
+				var selected = $("li[class$='ui-selected']");
+				selectType(selected.val());
+			}
+		}); 
+		// ค้นหาข้อมูลด้วย รหัสสินค้าเช่น 6011
+		
+		$("#code").change(function(){
+
+			$("#code").val(($("#code").val()).toUpperCase());
+			var code_id = $("#type_id").text() + $("#code").val();
+			var item = new Item();
+			URL = "<?=HOME?>promotions/XML/"+code_id;
+			item.getStock(URL);
+			$("#stock").html(item.getStockHTML());
+			$("#promotion").html(item.getPromotionHTML());
+			promotion = item.promotion;
+
+			if(item.priceUnit != 0) {
+				item.priceUnit = parseFloat(item.priceUnit).toFixed(2);
+				$("#p_price").val(item.priceUnit); 	
+			}
+			
+			if(item.cost != 0 && item.cost != null){ 
+				var cost = parseFloat(item.cost).toFixed(2)+ "฿";
+				$("#cost").html( cost); 	
+			}
+			obj.promotion_id 	= item.promotion_id;
+			obj.promotion 		= item.promotion;
+			obj.cost					=	item.cost;
+			obj.priceUnit			=	item.priceUnit;
+		});
+
+		
+		//ปุ่มแสดงรายการแบบทุกรายการ
+		$("#tab1").click(function(){
+			$("#list_product").html(listOrder_1.newList(listOrder_1.item,'item'));
+			$("#I_price_summary").html(listOrder_1.summary(listOrder_1.item));
+			listOrder_1.refresh();
+			//alert(dump(listOrder_1.item));
+		});
+		// แสดงรายการแบบ มีโปรโมชั่น
+		$("#tab2").click(function(){
+			displayOrderWithPromotion();
+		});
+		
+		//  ปุ่มเพิ่ม อัตราราคาส่วนลด
+		$("#tab3").click(function(){
+			value=prompt("ส่วนลด",-1);
+			if(value > 0){
+				value = 0 - value;
+			}else
+				return 0;
+			
+			dis = new Item("ส่วนลด",1,value,null,null,value);
+			dis.cost = dis.priceUnit = value;
+			dis.quantity = 1;
+			listOrder_1.arrageItem(dis);
+			//listOrder_1.refresh();
+			listOrder_1.discount.push(dis);
+			displayOrderWithPromotion();
+		});
+	});
+	
+	/* เปิด PO ใบเสร็จ 
+	// status PO 
+	//  0 = Not Open
+	//  1 = PO Open
+	//  2 = PO Hold
+	//  3 = PO Closed
+	*/
+	function openPO(){
+		var url = "<? echo HOME ?>bills/openBill";
+
+		var result = null;
+		$.ajax({ url: url, 	type: 'get',		dataType: 'html',	async: false,	success: function(data) {
+			result = parseInt(data);	} 
+		});
+		if( result == null || result == 0){
+			alert("ไม่สามารถเปิด Bill ได้ Err:001");
+		}
+		
+		return result;
+	}
+	
+	function displayOrderWithPromotion(){
+		$("#I_price_summary").html(listOrder_1.summary(listOrder_1.discount));
+		$("#list_product").html(listOrder_1.newList(listOrder_1.discount,'promotion'));
+	}
+  
+	function selectType(id){
+		var URL = "<?=HOME?>bills/getTypeItem/"+id;
+		var load =$.get(URL,function(data,status){
+				text = trimData(data);
+				document.getElementById("selectType").innerHTML=text;
+		});
+	}
+	//-----function Query data -------
+	
+	function showItem(item_id){
+	
+		var product = new Item();
+		URL = "<?=HOME?>promotions/type/"+item_id;
+		product.setItemXML(URL);
+		
+		if ( (product.pic != null) && (product.pic != "") ){
+			IMG ="<div><img src=\"../"+product.pic+"\" width='100px' height='100px'></div>";
+		}else{
+			IMG ="<div>"+product.name+"</div>"
+		}
+		
+		document.getElementById("item-picture").innerHTML= IMG;
+		$("#type_id").html(product.serial);
+		$("#p_price").val(product.priceUnit);
+		if (product.cost !=0 && product.cost != null){	$("#cost").html(product.cost.toFixed(2) + "฿");	}
+		$("#promotion").html(product.getPromotionHTML());
+		$("#type_detail").html(product.detail);
+		
+		return obj = product;
+	}
+	
+	// หน้าจอ(Dialog)แสดงรายการสินค้า เพื่อใส่จำนวน และแก้ไขราคาลงในหน้า POS
+	
+	
+	function selectItem(item_id){
+		clearField();
+		var product = showItem(item_id);
+		//alert(product.promotion.length);
+		
+		dialog = $( "#dialog_item" ).dialog({
+			title:product.name,
+			height:440,
+			width:450,
+			modal: true,
+			resizable: false,
+			/*buttons:[	]*/
+			buttons: {
+				"OK": function() {
+					verifyProductForm(product);
+					loopA=0;
+				},
+				"Cancel": function() {
+					$( this ).dialog( "close" );
+				}
+			},
+			close : function() {		
+				clearField();
+			},
+		});
+		
+	}
+	function OK_onClick(){
+		event.preventDefault();
+		verifyProductForm(obj);
+	}
+	
+	function verifyProductForm(product){
+		if($("#type_id").html() != "") {
+			product.product_id 	= $("#type_id").html()+$("#code").val();
+			product.code				=$("#code").val();
+		} else
+			return ;
+			
+		if($("#p_price").val() !="" || $("#p_price").val() !=0 )
+			product.priceUnit    	= $("#p_price").val();
+		if($("#quantity").val() !="" || $("#quantity").val() !=0 )	
+			product.quantity     	= $("#quantity").val();
+		
+		product.type_id			= $("#type_id").html();
+		product.promotion_id = obj.promotion_id;
+		
+		if($("#inventoryStock").html() == null){	
+			product.inventoryStock = 0; 
+			widthPayment = "450px";
+		}else{
+			product.inventoryStock = $("#inventoryStock").html();
+			widthPayment = "650px";
+		}
+		
+		//alert(" verifyProductForm\n"+dump2(product));
+		listOrder_1.arrageItem(product);		                              //รวม สินค้ารหัสเดียวกัน เช่นด้ายรหัส 6010 
+		group = listOrder_1.arrageOrder(listOrder_1.item);         // รวม สินค้าชนิดเดียวกัน  เช่นด้ายวีนัส
+		promotionItems = listOrder_1.checkPromotion();
+		
+		//Debug
+		var text = "========item==========\n";
+		text += dump(listOrder_1.item);
+		text += "==================\n";
+		text += "======arrage Oreder(group)============\n";
+		text += dump(group);
+		text += "==================\n";
+		text += "======Promotion============\n";
+		text += dump(promotionItems)+"\n";
+		
+		//error = text;
+		//alert(text);
+		$("#list_product").html(listOrder_1.newList(listOrder_1.discount,'promotion'));
+		$("#I_price_summary").html(listOrder_1.summary(listOrder_1.discount));
+		$("#dialog_item").dialog( "close" );
+		
+	}
+	
+	function clearField(){
+		document.getElementById("item-picture").innerHTML= "";
+		$("#type_id").html("");
+		$("#p_price").val(0);
+		$("#cost").html(0 + "฿");
+		$("#promotion").html(0);
+		$("#code").val("");
+		$("#stock").html("");
+		$("#quantity").val(1);
+		obj = new Item();
+	}
+	
+	function buttom_deleteItem_onClick(index){
+		listOrder_1.deleteItem(index);
+		$("#list_product").html(listOrder_1.newList(listOrder_1.item,'item'));
+	}
+	
+    function trimData(text){
+		text = text.trim();
+		var t1= text.lastIndexOf("<table");
+		var t2= text.lastIndexOf("</table>");
+		var t = text.slice(0,t1) + text.slice(t2,text.length);
+		
+		return t;
+	}
+	function editValueItem(i){
+		value=prompt("แก้ไขจำนวนราคาต่อหน่วย",listOrder_1.item[i].priceUnit);
+		if (value!=null && value!=""){
+			listOrder_1.item[i].priceUnit=parseFloat(value).toFixed(2);
+		}
+		$("#list_product").html(listOrder_1.newList(listOrder_1.item,'item'));
+	}
+	
+	function editValue(i){
+		value=prompt("แก้ไขจำนวนราคาต่อหน่วย",listOrder_1.discount[i].priceUnit);
+		if (value!=null && value!=""){
+			listOrder_1.discount[i].priceUnit=parseFloat(value).toFixed(2);
+		}
+		displayOrderWithPromotion();
+	}
+	
+	function print_receipt(data){
+		dialog = $( "#dialog_edit" ).dialog({
+			title:"print",
+			height:"350",
+			width:"300",
+			modal: true,
+			resizable: false,
+		});
+		
+		$("#print_text").html(data);
+		dialog.dialog( "close" );
+	}
+	
+	function myTimer() {
+		var d = new Date();
+		document.getElementById("time").innerHTML = d.toLocaleTimeString();
+		document.getElementById("date").innerHTML = d.getDate() +"/"+(d.getMonth()+1) +"/" + d.getFullYear();
+	}
+  
+	</script>
+	</head>
+
+<body>
+        <div class="pos"  id="main">
+            <div class="pos"  id="result_sec">
+                <div class="pos"  id="result_panel">ราคารวม :</div>
+                <div class="pos"  id="I_price_summary">0.00</div>
+				<!--Header Zone ด้านขวา กว้าง 895 สูง 62 -->
+				<div class="pos" id="rightHeader" style=" width:895px;height:62px">
+				<!-- -->
+					<div style=" width:108px;height:60px;float:left;" >
+						
+					</div>
+				<!-- -->
+					<div style=" width:600px;height:60px;float:left; border:0" >
+							
+					</div>
+				<!--      section Time      -->
+					<div style=" width:160px;height:60px;float:left;border:0" > 
+						<div style=" width:160px;height:28px;float:left;text-align:right;font-size:20px;padding-top:10px;font-weight:bold" id="date"></div>
+						<div style=" width:160px;height:20px;float:left;text-align:right"  id="time"></div>
+					</div>
+				<!--      section Time      -->
+				</div>
+            </div>
+            <div class="pos"  id="body_sec">
+                <div class="pos"  id="cash_sale">
+                    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix"  id="cash_sale_header" style="border:1px solid black">&nbsp;code :<input type="text" name="serial"></div>
+                    <div class="pos"  id="cash_sale_body">
+					
+<!-----------------------------------//
+//		Section list product                 //
+//------------------------------------->
+
+                      <div class="I_order_list_header">
+								<div class="I_order_list_header_1" style="width:15px">@</div>
+								<div class="I_order_list_header_1" style="width:220px">สินค้า</div>
+								<div class="I_order_list_header_1" style="width:50px">ราคา</div>
+								<div class="I_order_list_header_1" style="width:50px">จำนวน</div>
+								<div class="I_order_list_header_1" style="width:88px">รวม</div>
+							</div>
+
+							<div id="list_product"></div>
+
+<!--------------------------------------------------------------------->
+                    </div>
+                </div>
+                <div class="pos"  id="container">
+                    <div class="pos"  id="CC">
+                        <div class="pos"  id="CCL">
+                            <div   class="CCLH pos ">ประเภท</div>
+                            <div class="pos"  id="CCLB">
+<!-----------------------------------//
+//		Section Type                 //
+//------------------------------------->
+                                <ol id="selectCategory">
+                                    <?=$CATEGORY?>
+                                </ol>
+                            </div>
+                            <div  class="CCLH pos">รายการสินค้า</div>
+                            <div class="pos"  id="CCLT">
+<!-----------------------------------//
+//       Section iTems
+//----------------------------------->
+                                <ol id="selectType">
+									<?=$TYPE?>
+								</ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pos"  id="CH">
+                        <div class="pos"  id="CHL">
+                            Panel Right
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<script>
+				function button_changed(){
+					URL ="../products/changed/"+$("#type_id").html();
+					window.open(URL,'_blank');
+				}
+			</script>
+			<div id="dialog_item"  title="Items:" style="display:none">				
+					<!--  Tools control-->
+					
+					<form name="showItem" >
+					<div style="border:0px solid red" class="item_dialog">
+						<div class="item_dialog" style="width:400px">
+							<div id="item-picture" class="item_dialog">No Picture..</div>
+							<div class="item_dialog">
+								<div>
+									<span style="margin-left:5px">รหัสสินค้า : </span>
+									<span><label id="type_id"></label><input type="text" name="code" size="4"  class="input_1" id="code"   onclick="focus();select();"/></span>
+								</div>
+								<div>
+									<span style="margin-left:5px">จำนวน : </span>
+									<span><input type="text" id="quantity" name="quantity" size="4"  class="input_1" value="1." style="text-align:right;" onkeypress="return blockNaN(this)" onclick="focus();select();" /></span>
+									<span>ชิ้น.</span><span id="errmsg" style="color:red;font-size:12px"></span>
+								</div> 
+								<div>
+									<span style="margin-left:5px">ราคา :</span>
+									<span><input type="text" id="p_price" name="u_price" size="6" class="input_1" style="text-align:right;color:red"   onkeypress="return blockNaN(this)" onclick="focus();select();" /></span>
+									<span><label>บ.</label></span>
+									<span style="border:1px #F9D02B dotted;color:#BDBDBD">ทุน: <label id="cost" ></label></span>
+								</div>
+							</div>
+						</div>
+						<div class="item_dialog">
+								<div style="color:gray;"><span style="text-align:left">Promotions</span></div>
+								<div id="promotion"></div>
+								<div id="stock" >	</div>
+						</div>
+						<div class="customer_field"></div>
+						<div>
+							<!-- Allow form submission with keyboard without duplicating the dialog button -->
+							<input type="submit" id="buttom_1" tabindex="-1" value="ตกลง" onclick="OK_onClick();" style="position:absolute; top:-1000px" />
+						</div>
+						
+						<div style="height:15px;border:0px solid red; width:100%;float:left;text-align:right">
+							<button style="font-size:12px" onclick="button_changed()" tabindex="20">เปลี่ยน</button>
+						</div>
+						<div class="item_dialog" id="type_detail" style="font-size:8px;width:320px">
+							
+						</div>
+					</div>
+				</form>
+			</div>
+			<!--dialog -->
+			<div id="dialog_edit" title="editPrice" >
+				<div id="print_text" class="print_1"></div>
+			</div>
+
+       </div>
+<!-----------------------------------------//
+//			dialog items
+//------------------------------------------>		
+			
+		<div style="border:0px solid gray;float:left; width:100%">
+				<button id="tab1">ทุกรายการ</button>
+				<button id="tab2">โปรโมชั่น</button>
+				<button id="tab3">ส่วนลด</button>
+				<button type="button" id="tab4" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" style="height:60px">
+					<span class="ui-button-text" onclick="checkPayment();">รับเงิน</span>
+				</button>
+				<!-- <button id="debug" onclick="test();">debug</button>-->
+		</div>	
+		
+<!-----------------------------------------------------------------
+			dialog Confirm paymant
+------------------------------------------------------------------->
+	<div id="payment" style="display:none">
+	<form onsubmit="return false;">
+		<div id="payment_show1">			
+			<div class="payment_border"><button class="payment_banknote" onclick="paymentAddValue(1000)" >+1,000</button></div>
+			<div class="payment_border"><button class="payment_banknote" onclick="paymentAddValue(500)" >+500</button></div>
+			<div class="payment_border"><button class="payment_banknote" onclick="paymentAddValue(100)" >+100</button></div>
+			<div class="payment_border"><button class="payment_banknote" onclick="paymentAddValue(50)" >+50</button></div>
+			<div class="payment_border"><button class="payment_banknote" onclick="paymentAddValue(20)" >+20</button></div>
+			<div class="payment_border"><button class="payment_banknote" onclick="paymentAddValue(10)" >+10</button></div>
+			<script>
+				function paymentAddValue(money){
+					value = parseInt($("#payment_text").val()) + parseInt(money);
+					$("#payment_text").val( value);
+					paymentChange();
+				}
+				// textbox  ตัวเลขรับเงิน
+				function paymentChange(){
+					change = parseFloat($("#payment_text").val()) - parseFloat($("#I_price_summary").html(),"0.00");
+					change = change.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					$("#payment_change").html(change);
+				}
+			</script>
+		</div>
+		<!---------------------------------------------------- Dialog Payment  -------------------------------------------------------------->		
+
+		<script>
+			function checkPayment(){
+
+				/*  ตรวจสอบ สินค้า ถ้าไม่มีให้ ออกจากการคิดเงิน */
+				if(listOrder_1.item.length <= 0){
+					alert("ไม่มีสินค้าในรายการ");
+					return 0;
+				}
+		
+				//ตรวจสินค้าในสต็อก
+				$("#payment_show").html();
+				//$("#payment_price_summary").html(listOrder_1.summary(listOrder_1.discount));
+				$("#payment_price_summary").html($("#I_price_summary").html());
+				
+				//แสดงรายการใน Stock
+				$("#payment_show3").html(listOrder_1.cuttingStock());
+				
+				//  Show dialog payment
+				dialog = $( "#payment" ).dialog({
+					title:"Payment: Bill NO." +PO_id,
+					height:500,
+					width:650,
+					modal: true,
+					position:[470,60],
+					resizable: false,
+					/*buttons:[	]*/
+					buttons: {
+						OK: function() {
+							payment_buttonOK();
+						},	
+						Cancel: function() {
+							$("#payment_text").val(0);
+							$("#payment_change").html(0);
+							$( this ).dialog( "close" );
+						},
+						"Clear":function() {
+							$("#payment_text").val(0);
+							$("#payment_change").html(0);
+						}
+					},
+				});
+			}
+			
+			function payment_buttonOK(){
+				paymentChange();
+				if(( parseFloat($("#payment_change").html()) <  0) ){
+					alert("เงินไม่พอจ่าย");
+					return 0;
+				}
+				listOrder_1.status = 3;
+				postData = listOrder_1.postDataProduct();
+
+				// ajax Post to Billing Process
+				var status = $.post("<? echo HOME ?>bills/checkBill",postData).done();
+					
+				if(status.readyState ==1){				//print receipt							
+					var debtCh =  document.getElementById("print_debt").checked;
+				}else{
+						alert("Founds Problem ??!!??");
+				}
+					location.reload();
+			}
+			
+			function checkedPrint(){
+				paymentChange();
+				if(( parseFloat($("#payment_change").html()) <  0) ){
+					alert("เงินไม่พอจ่าย");
+					return 0;
+				}
+				print_receipt(listOrder_1.print());   // แสดงรายการที่จะพิมพ์ด้วย ข้อความ text
+				$("#print_text").printThis();
+			}
+			function checkedDebt(){
+				var ch = document.getElementById("print_debt").checked;
+			}
+		</script>
+		
+		<div id="payment_show2" >
+			<div style="border-bottom:1px dashed gray;float:left;padding-bottom:13px ">
+				<button class="payment_print" id="print_checked" onclick="checkedPrint();" onmouseover="this.style.cursor='hand'">ใบเสร็จ</button>
+				<button class="payment_print" onclick="checkedDebt();" onmouseover="this.style.cursor='hand'">
+					<input type="checkbox" id="print_debt" value=1 onclick="checkedDebt();">ค้างจ่าย
+				</button>
+			</div >
+			<table class="payment_border" style="width:250px">
+				<tr>
+					<td style="text-align:right">
+					<div style="width:50px;float:left"> รับเงิน </div>
+					<div><input type="text" onclick="select();" value="0" size="5" id="payment_text" onkeyup="paymentChange();" ></div>
+					</td>
+				</tr>
+				<tr><td style="text-align:right"><label style="font-size:50px;"> - </label><td></tr>
+				<tr><td style="text-align:right; font-size:35px;font-weight:bold; border-bottom:4px solid #BEC5C4;"><label style="" id="payment_price_summary"></label><td></tr>
+				<tr>
+					<td >
+						<div style="width:50px;float:left">ทอน</div>
+						<div style="float:right"><label id="payment_change" style="font-size:40px;font-weight:bold;color: green;">0.00</label></div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div  id="payment_show3" >	</div>
+		</form>
+	</div>
+	<div id="print_zone" style="display:none" class="page-break-no"></div>
+</body>
+</html>
