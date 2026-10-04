@@ -61,7 +61,8 @@ class Type extends AppModel{
 		return $this->query($sql);
 	}
 	public function promotionType(){
-		$sql ="SELECT DISTINCT Type.type_id,Type.name,Type.pic   FROM ";
+		#$sql ="SELECT DISTINCT Type.type_id,Type.name,Type.pic   FROM ";
+		$sql ="SELECT Type.type_id,Type.name,Type.pic   FROM ";
 		$sql.="inv_promotions as Promotion  INNER JOIN inv_types as Type ";
 		$sql.="ON Promotion.type_id = Type.type_id ";
 		$sql.="Where ";

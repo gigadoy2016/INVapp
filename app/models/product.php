@@ -21,7 +21,7 @@ class Product extends AppModel{
 		$sql.=" FROM inv_categories as Category INNER JOIN inv_products as Product";
 		$sql.=" ON Category.category_id=Product.category_id ";
         $sql.=" WHERE Product.type_id=".$id;
-        $sql.=" GROUP BY Product.product_id ";
+        $sql.=" GROUP BY Product.product_id, Category.name, Product.category_id, Product.type_id, Product.product, Product.code, Product.quantity ";
         if(empty($orderBy)){
         	$sql.=" ORDER BY q_number ASC";
         }else{
@@ -131,7 +131,7 @@ class Product extends AppModel{
 		$sql.=" ON Category.category_id=Product.category_id) ";
 		$sql.=" LEFT JOIN inv_limitcheck as L ON Product.product_id = L.product_id ";
         $sql.=" WHERE Product.type_id=".$id;
-        $sql.=" GROUP BY Product.product_id ";
+        $sql.=" GROUP BY Product.product_id, Category.name, Product.category_id, Product.type_id, Product.product, Product.code, Product.quantity, L.min, L.max ";
 	
         if(empty($orderBy)){
         	$sql.=" ORDER BY alert,q_number ASC";
@@ -237,7 +237,7 @@ class Product extends AppModel{
 		$sql.=" LEFT JOIN inv_limitcheck as L ON ";
 		$sql.=" Product.type_id = L.product_id ";
         $sql.=" WHERE Product.type_id='".$type_id."'";
-        $sql.=" GROUP BY Product.product_id )";
+        $sql.=" GROUP BY Product.product_id, Type.name, Product.code, Product.quantity, L.max, L.min )";
 
 		$sql.=" UNION ";
 
@@ -254,7 +254,7 @@ class Product extends AppModel{
 		$sql.=" LEFT JOIN inv_limitcheck as L ON ";
 		$sql.=" Product.product_id = L.product_id ";
         $sql.=" WHERE Product.type_id='".$type_id."' AND L.max > 0";
-        $sql.=" GROUP BY Product.product_id ";
+        $sql.=" GROUP BY Product.product_id, Type.name, Product.code, Product.quantity, L.max, L.min ";
 		$sql.=")";		
 
 		$sql.=")";

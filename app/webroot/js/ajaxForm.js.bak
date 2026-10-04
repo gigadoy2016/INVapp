@@ -56,12 +56,9 @@ showElement("formAdd2");
         }
 	};
 	
-	xmlHttp.open("post",url,false);
-	xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xmlHttp.send(data);
-	if (xmlHttp.responseText) {
-		document.getElementById("formAdd2_1").innerHTML = xmlHttp.responseText;
-	}
+xmlHttp.open("post",url,false);
+xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+xmlHttp.send(data);
 }
 /*-----------------------------*/
 
@@ -110,15 +107,13 @@ function delConfirm(){
 function TextBox1_onChnage(obj){		//TextBox(code) in the from Order product.
 	obj.value=obj.value.toUpperCase();
 	
-	var base = (typeof HOME !== 'undefined' && HOME) ? HOME : (window.location.origin + '/INVapp/');
-	var URL = base + "promotions/XML/" + product.serial + obj.value;
+	var URL ="http://localhost/INVapp/promotions/XML/"+product.serial+obj.value;
 	var xml = product.ajax(URL);
 
 	product.setXML(xml);
 
-	var pro = '';
-	if(product.promotion != -1){
-		pro = '<table>';
+	if(product.promotion !=-1){
+		var pro = '<table>';
 		pro +='<tr><td>Promotion</td><td>จำนวน</td><td>ราคา</td></tr>';
 		for(var i=0;i<product.promotion.length;i++){
 			pro +='<tr><td>'+product.promotion[i]['name']+'</td><td>'+product.promotion[i]['number']+'</td>';
@@ -127,7 +122,8 @@ function TextBox1_onChnage(obj){		//TextBox(code) in the from Order product.
 		pro +='</table>';
 		document.getElementById("ob1").innerHTML = pro;
 	}else{
-		document.getElementById("ob1").innerHTML = "<div>Promotion Not Found.</div>";
+		if(pro !=null)
+			document.getElementById("ob1").innerHTML = "<div>Promotion Not Found.</div>";
 	}
 	
 	if (product.stock.length > 0) {

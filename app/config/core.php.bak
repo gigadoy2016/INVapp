@@ -39,9 +39,7 @@
  */
 //	define ('BASE_URL', env('SCRIPT_NAME'));
 $split =explode('/', env('SCRIPT_NAME'));
-$http_host = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (!empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'].':8082' : 'localhost:8082');
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-define('HOME', $protocol . $http_host . '/' . $split[1] . '/');
+define ('HOME','http://'.$_SERVER['SERVER_NAME'].':8082/'.$split[1].'/');
 /**
  * Set debug level here:
  * - 0: production

@@ -57,7 +57,7 @@ class DATABASE_CONFIG
 {
 	var $default = array('driver' => 'mysql',
 								'connect' => 'mysql_connect',
-								'host' => 'db',
+								'host' => '172.27.176.1',
 								'login' => 'root',
 								'password' => '9161133',
 								'database' => 'inv',

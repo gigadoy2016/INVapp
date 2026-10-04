@@ -9,9 +9,10 @@ class BillsController extends AppController{
     function index(){
     	$this->body->title='POS System';
     	$this->Casher->setCSS(HOME.'css/cash_style.css');
-		$javascript = '<script src="'.HOME.'js/lib/bill.js" type="text/javascript"></script>';
-		$javascript .='<script src="'.HOME.'js/lib/casher.js" type="text/javascript"></script>';
-		$javascript .= '<script src="'.HOME.'js/lib/item.js" type="text/javascript"></script>';
+		$v = time();
+		$javascript = '<script src="'.HOME.'js/lib/bill.js?v='.$v.'" type="text/javascript"></script>';
+		$javascript .='<script src="'.HOME.'js/lib/casher.js?v='.$v.'" type="text/javascript"></script>';
+		$javascript .= '<script src="'.HOME.'js/lib/item.js?v='.$v.'" type="text/javascript"></script>';
 		$javascript .= '<script type="text/javascript">var HOME="'.HOME.'"</script>';
 		
 		$this->body->setJavascript($javascript);

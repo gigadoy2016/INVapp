@@ -137,48 +137,43 @@ function productForm(elementID){
 	}
     
 	this.ajax = function(URL){
-    	var xmlHttp = GetXmlHttpObject(); //Check Support Brownser
-        if (xmlHttp == null){
-            alert ("Browser does not support HTTP Request");
-            return null;
-        } 
+    	var xmlHttp;
+        var xml;
 		var layer = this.layerM+"_1";
-		var layerEl = document.getElementById(layer);
-		if (layerEl) {
-			layerEl.innerHTML = "<div class='loading'> Waitting..</div>";
-		}
-        xmlHttp.open("GET", URL, false);
+
+        xmlHttp=GetXmlHttpObject(); //Check Support Brownser
+        if (xmlHttp==null){
+            alert ("Browser does not support HTTP Request");
+            return;
+        } 
+        xmlHttp.onreadystatechange=function (){
+            if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete"){
+                xml = xmlHttp.responseXML;
+            }else{
+            	document.getElementById(layer).innerHTML="<div class='loading'> Waitting..</div>" ;
+            }
+        };
+        xmlHttp.open("GET",URL,false);
         xmlHttp.send(null);
-        var xml = xmlHttp.responseXML;
-        if ((!xml || !xml.documentElement) && xmlHttp.responseText) {
-            try {
-                xml = (new DOMParser()).parseFromString(xmlHttp.responseText, "text/xml");
-            } catch(e) {}
-        }
         return xml;
     }
 
 	
-	this.getProductByType = function(type_id){
-		var base = (typeof HOME !== 'undefined' && HOME) ? HOME : (window.location.origin + '/INVapp/');
-		var url = base + "promotions/type/" + type_id;
-		var xml = this.ajax(url);
+	this.getProductByType =function(type_id){
+		url = "http://localhost/invapp/promotions/type/"+type_id;
+		xml = this.ajax(url);
 		this.item = new Item();
 		this.item.setItem(xml);
 		this.genCode(this.item);
 	}
 	
 	this.genCode = function(item){
-		var base = (typeof HOME !== 'undefined' && HOME) ? HOME : (window.location.origin + '/INVapp/');
-		var picSrc = item.pic;
-		if (picSrc && picSrc.indexOf('http') !== 0 && picSrc.indexOf('/') !== 0) {
-			picSrc = base + picSrc;
-		}
+	
 		var child_div=document.getElementById("formAdd2_1");
 		var code = '<div><table width="100%">';
 			code+='<tr>';
 				code+='<td width="30%" rowspan="4">';
-					code+='<img width="100%" src="'+picSrc+'"/>';
+					code+='<img width="100%" src="'+item.pic+'"/>';
 				code+='</td>';
 				code+='<td width="70%">';
 					code+='<h2>'+item.name+'</h2>';
@@ -201,8 +196,8 @@ function productForm(elementID){
 						code+=' ชิ้น.';
 					}
 					code+='</span>';
-					code+='<span> <a href="#" onclick="quantity.value++"><img src="'+base+'img/ico_up2.gif"></a> ';
-					code+='<a href="#" onclick="quantity.value--"><img src="'+base+'img/ico_down2.gif"></a></span>';
+					code+='<span> <a href="#" onclick="quantity.value++"><img src="img/ico_up2.gif"></a> ';
+					code+='<a href="#" onclick="quantity.value--"><img src="img/ico_down2.gif"></a></span>';
 				code+='</td>';
 			code+='</tr>';
 			code+='<tr><td><span>ราคาต่อชิ้น :</span>';
